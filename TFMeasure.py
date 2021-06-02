@@ -25,6 +25,7 @@ from matplotlib.backends.backend_qt5 import NavigationToolbar2QT as NavigationTo
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 import measure
+import rpi_client
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))  # このスクリプトのパス
 
@@ -205,7 +206,7 @@ class Window(QDialog):
         # SSTF
         elif self.combo_Mode.currentIndex() is 1:
             self.btn_pltChange.setHidden(True)
-            if os.path.exists("/Volumes/share/angle") is False:
+            if not rpi_client.is_healthy():
                 QMessageBox.warning(self, "Message", u"Speaker selector is not connecting.")
                 return
             if self.averaging_times is "":
@@ -215,7 +216,7 @@ class Window(QDialog):
                 QMessageBox.warning(self, "Message", u"subject Name is empty")
                 return
             if self.speaker_index is 4:
-                with open('/Volumes/share/angle', 'w') as select: select.write("1")
+                rpi_client.put_speaker_num(1)
                 measure.SSTF(self.subject, self.averaging_times, 'check', 150, 405, self.outdir)
                 self.plot(self.outdir + '/SSTF/cSSTF_check_L.DDB'
                           ,
@@ -224,7 +225,7 @@ class Window(QDialog):
 
             for n in range(18):
                 angle = self.speaker_index * 90 + n * 5
-                with open('/Volumes/share/angle', 'w') as select: select.write(str(n + 1))
+                rpi_client.put_speaker_num(n + 1)
                 measure.SSTF(self.subject, self.averaging_times, angle, 150, 405, self.outdir)
                 self.te_log.append('SSTF_' + str(angle) + '_L.DDB and SSTF_'
                                    + str(angle) + '_R.DDB are measured. (' + datetime.now().strftime("%H:%M:%S") + ')')
@@ -235,14 +236,13 @@ class Window(QDialog):
 
         # LSTF
         elif self.combo_Mode.currentIndex() is 2:
-            if os.path.exists("/Volumes/share/angle") is False:
+            if not rpi_client.is_healthy():
                 QMessageBox.warning(self, "Message", u"Speaker selector is not connecting.")
                 return
             if self.averaging_times is "":
                 QMessageBox.warning(self, "Message", u"SANnum is invalid or empty")
                 return
-            with open('/Volumes/share/angle', 'w') as select:
-                select.write(str(self.speaker_index + 1))
+            rpi_client.put_speaker_num(self.speaker_index + 1)
             measure.LSTF(self.speaker_index + 1, self.averaging_times, 150, 405, 3800, 4823, self.edit_Save.text())
             self.te_log.append('/LSTF_' + str(self.speaker_index + 1) + '.DDB is measured. ('
                                + datetime.now().strftime("%H:%M:%S") + ')')
@@ -250,8 +250,7 @@ class Window(QDialog):
 
         # MicAjust
         elif self.combo_Mode.currentIndex() is 3:
-            with open('/Volumes/share/angle', 'w') as select:
-                select.write("1")
+            rpi_client.put_speaker_num(1)
             measure.mic_ajust()
             self.te_log.append('rec_L.DDB and rec_R.DDB are measured. (' + datetime.now().strftime("%H:%M:%S") + ')')
             self.plotChange()

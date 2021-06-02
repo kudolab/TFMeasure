@@ -8,22 +8,27 @@
 # 2018
 # ######################################################################
 
-import subprocess, os
+import os
+import subprocess
 
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__)) #このスクリプトのパス
-mseq = SCRIPT_DIR+"/m14.DSB"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))  # このスクリプトのパス
+mseq = SCRIPT_DIR + "/m14.DSB"
+
 
 def playrec_mono(averaging_times, outfile):
     cmd=" ".join(['playrec_mono_inPath', mseq, str(averaging_times), outfile, SCRIPT_DIR])
     subprocess.Popen(cmd.split(" ")).wait()
 
+
 def playrec_2ch(averaging_times, outfile):
     cmd=" ".join(['playrec_2ch_inPath', mseq, str(averaging_times), outfile, SCRIPT_DIR])
     subprocess.Popen(cmd.split(" ")).wait()
 
+
 def averaging(infile, averaging_times, outfile):
-    cmd=" ".join(['douki_new', mseq, infile, str(averaging_times), outfile])
+    cmd = " ".join([SCRIPT_DIR + '/c_bin/douki_new', mseq, infile, str(averaging_times), outfile])
     subprocess.Popen(cmd.split(" ")).wait()
+
 
 def cross_correlation(infile, outfile):
     cmd=" ".join(['IMPmcode', mseq, infile, outfile])
@@ -47,3 +52,4 @@ def speach(division_number, infile):
 
 def closedloop():
     subprocess.Popen('closed_loop_new').wait() 
+

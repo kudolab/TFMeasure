@@ -3,7 +3,7 @@ import sys
 
 import requests
 
-BASE_ORIGIN = "http://172.24.176.51"
+BASE_ORIGIN = "http://172.24.176.169"
 
 
 def is_healthy():

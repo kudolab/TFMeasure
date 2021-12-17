@@ -273,7 +273,7 @@ class Window(QDialog):
         self.axes1.set_title('Impulse Response', fontsize=15)
         self.axes1.set_xlabel("Sample", fontsize=15)
         self.axes1.set_ylabel("Level", fontsize=15)
-        self.axes1.plot(data, '-', label=re.search("(.*)/(.*)", file_L).group(2))
+        self.axes1.plot(data, '-', label=re.search("(.*)/(.*)", file_L).group(2), alpha=0.4)
         if file_R != None:
             self.axes1.plot(data2, '-', label=re.search("(.*)/(.*)", file_R).group(2))
         self.axes1.legend(bbox_to_anchor=(0., 1.02, 1., .102), borderaxespad=-0.2)
@@ -291,7 +291,7 @@ class Window(QDialog):
         freq = np.fft.fft(data[0:N])
         data_amplitude = [np.sqrt(c.real ** 2 + c.imag ** 2) for c in freq]
         data_decibel = 10.0 * np.log10(data_amplitude)
-        self.axes2.plot(x[0:N], data_decibel, '-', label=re.search("(.*)/(.*)", file_L).group(2))
+        self.axes2.plot(x[0:N], data_decibel, '-', label=re.search("(.*)/(.*)", file_L).group(2), alpha=0.4)
 
         if file_R != None:
             freq2 = np.fft.fft(data2[0:N])

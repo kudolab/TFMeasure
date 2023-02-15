@@ -14,6 +14,7 @@
 import os
 import re
 import sys
+import time
 from datetime import datetime
 
 import matplotlib.pyplot as plt
@@ -219,8 +220,7 @@ class Window(QDialog):
                 rpi_client.put_speaker_num(1)
                 measure.SSTF(self.subject, self.averaging_times, 'check', 150, 405, self.outdir)
                 self.plot(self.outdir + '/SSTF/cSSTF_check_L.DDB'
-                          ,
-                          self.outdir + '/SSTF/cSSTF_check_R.DDB')  # /SSTF/cSSTF_000_R.DDBから/SSTF/cSSTF_check_R.DDBに名称変更
+                         ,self.outdir + '/SSTF/cSSTF_check_R.DDB')  # /SSTF/cSSTF_000_R.DDBから/SSTF/cSSTF_check_R.DDBに名称変更
                 return
 
             for n in range(18):

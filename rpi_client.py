@@ -4,16 +4,21 @@ import sys
 import requests
 from requests.exceptions import Timeout
 
-BASE_ORIGIN = "http://172.24.176.169"
+# wifi (backupaudio2)--------------------------------------------------
+BASE_ORIGIN = "http://172.24.184.114"
+
+# LAN (Belkin-usb-c LAN) ----------------------------------------------
+#BASE_ORIGIN_old = "http://169.254.207.18"s
 
 
 def is_healthy():
     print("health check", file=sys.stderr)
     url = BASE_ORIGIN+"/health"
     try:
+        #response = requests.get(url, timeout=30.0, proxies=proxies_dic)
         response = requests.get(url, timeout=5.0)
     except Timeout:
-        print("requet timeout", file=sys.stderr)
+        print("request timeout", file=sys.stderr)
         return False
     return response.status_code == requests.codes.OK
 
